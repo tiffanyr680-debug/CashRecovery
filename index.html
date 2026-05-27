@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CashRecovery PRO | Unpaid Invoice Intelligence</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #040712; color: #f8fafc; }
+        .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
+        .btn-recovery { background: #ef4444; color: white; font-weight: 800; transition: 0.3s; }
+        .btn-recovery:hover { background: #f43f5e; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(239, 68, 68, 0.3); }
+        [x-cloak] { display: none !important; }
+    </style>
+</head>
+<body x-data="recoveryApp()" x-init="init()">
+
+    <div class="min-h-screen flex flex-col">
+        
+        <!-- Header -->
+        <nav class="h-20 glass sticky top-0 z-50 flex items-center justify-between px-10 border-b border-white/5">
+            <div class="flex items-center gap-2">
+                <div class="h-10 w-10 bg-rose-600 rounded-lg flex items-center justify-center font-black text-white text-xl">C</div>
+                <span class="text-xl font-extrabold tracking-tight uppercase">Cash Recovery</span>
+            </div>
+            <div class="flex gap-6">
+                 <a href="privacy.html" class="text-[10px] font-bold text-slate-500 hover:text-white uppercase tracking-widest">Privacy</a>
+            </div>
+        </nav>
+
+        <main class="flex-1 max-w-6xl mx-auto w-full py-12 px-6">
+            
+            <!-- LANDING PAGE VIEW -->
+            <section x-show="view === 'landing'" class="animate-in fade-in duration-700">
+                <div class="text-center py-10">
+                    <h1 class="text-7xl font-black mb-6 tracking-tighter leading-tight">Get your <span class="text-rose-500 italic underline">money back.</span></h1>
+                    <p class="text-slate-400 text-xl max-w-2xl mx-auto mb-12">Stop working for free. Our 3-step escalation engine finds your late invoices, calculates late fees, and generates the emails you're too nice to write.</p>
+                    <div class="flex flex-col md:flex-row justify-center gap-4 mb-24">
+                        <button @click="view = 'app'" class="btn-recovery px-12 py-5 rounded-2xl text-xl shadow-2xl">Launch Free Recovery Engine</button>
+                        <!-- REPLACE # WITH YOUR $1,000 STRIPE LINK -->
+                        <a href="https://buy.stripe.com/test_14AdR81SL2WT42SaxF0Fi0b" target="_blank" class="bg-white text-black px-12 py-5 rounded-2xl font-black text-xl hover:bg-slate-50 transition-all shadow-xl">Hire Specialist — $1,000</a>
+                    </div>
+                </div>
+
+                <!-- USER GUIDE / INSTRUCTIONS -->
+                <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="glass p-8 rounded-[2.5rem] border-white/5">
+                        <div class="text-rose-500 font-bold mb-2 uppercase text-[10px] tracking-widest">Step 01</div>
+                        <h3 class="text-lg font-bold mb-4">Input Invoices</h3>
+                        <p class="text-slate-500 text-sm">Enter the client name and original due date. Our engine identifies exactly how many days of profit you've lost.</p>
+                    </div>
+                    <div class="glass p-8 rounded-[2.5rem] border-white/5">
+                        <div class="text-rose-500 font-bold mb-2 uppercase text-[10px] tracking-widest">Step 02</div>
+                        <h3 class="text-lg font-bold mb-4">Add Late Fees</h3>
+                        <p class="text-slate-500 text-sm">The tool automatically calculates legal interest fees based on current inflation rates, adding value to your claim.</p>
+                    </div>
+                    <div class="glass p-8 rounded-[2.5rem] border-white/5">
+                        <div class="text-rose-500 font-bold mb-2 uppercase text-[10px] tracking-widest">Step 03</div>
+                        <h3 class="text-lg font-bold mb-4">Firm Escalation</h3>
+                        <p class="text-slate-500 text-sm">Generate 3 levels of emails—from friendly reminder to legal final demand—in just one click.</p>
+                    </div>
+                </div>
+                <p class="text-center text-[10px] text-slate-600 mt-20 uppercase font-bold tracking-[0.3em]">🔒 100% Local-First • No Financial Data Stored in Cloud</p>
+            </section>
+
+            <!-- APP WORKSPACE VIEW -->
+            <section x-show="view === 'app'" x-cloak class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="space-y-6">
+                    <div class="glass p-8 rounded-[2.5rem] border-rose-500/20 bg-rose-500/5">
+                        <p class="text-rose-500 text-[10px] font-black uppercase mb-2 tracking-widest">Total Recovery Potential</p>
+                        <div class="text-5xl font-black text-white" x-text="'$' + stats.total.toLocaleString()">$0</div>
+                    </div>
+                    <div class="p-8 rounded-[2.5rem] bg-rose-600 text-white shadow-2xl">
+                        <h4 class="font-black italic mb-2 uppercase text-xs">CEO Mode</h4>
+                        <p class="text-xs leading-relaxed opacity-90">"Every day your invoice stays unpaid, its value drops due to inflation. Reclaim your cash today."</p>
+                    </div>
+                </div>
+
+                <div class="col-span-2 space-y-6">
+                    <div class="glass p-10 rounded-[3rem] border-white/5">
+                        <h3 class="text-xl font-bold mb-8">📄 Add Late Invoice</h3>
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <input x-model="newItem.client" type="text" placeholder="Client Name" class="w-full bg-black/50 border border-white/10 p-4 rounded-xl outline-none focus:border-rose-500">
+                            <input x-model="newItem.amount" type="number" placeholder="Principal ($)" class="w-full bg-black/50 border border-white/10 p-4 rounded-xl outline-none focus:border-rose-500">
+                        </div>
+                        <input x-model="newItem.dueDate" type="date" class="w-full bg-black/50 border border-white/10 p-4 rounded-xl outline-none focus:border-rose-500 mb-4 text-slate-400">
+                        <button @click="addItem()" class="w-full bg-white text-black py-4 rounded-xl font-black hover:bg-rose-500 hover:text-white transition-all">RECOVER THIS CASH</button>
+                    </div>
+
+                    <div class="glass rounded-[3rem] overflow-hidden">
+                        <table class="w-full text-left">
+                            <thead class="bg-white/5 text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                                <tr><th class="p-6">Client</th><th>Days Late</th><th>New Total</th><th class="p-6 text-right">Escalate</th></tr>
+                            </thead>
+                            <tbody class="divide-y divide-white/5">
+                                <template x-for="(item, index) in items">
+                                    <tr class="hover:bg-white/5 transition-all">
+                                        <td class="p-6 font-bold" x-text="item.client"></td>
+                                        <td class="text-rose-500 font-bold" x-text="calculateDays(item.dueDate) + 'd'"></td>
+                                        <td class="text-emerald-500 font-bold" x-text="'$' + calculateTotal(item.amount, item.dueDate)"></td>
+                                        <td class="p-6 text-right">
+                                            <button @click="alert('Email Template Copied!')" class="bg-indigo-600 text-white text-[10px] font-bold px-4 py-2 rounded-lg">GET SCRIPT</button>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        function recoveryApp() {
+            return {
+                view: 'landing',
+                items: JSON.parse(localStorage.getItem('recovery_v1')) || [],
+                newItem: { client: '', amount: '', dueDate: '' },
+                stats: { total: 0 },
+                init() { this.calc(); },
+                addItem() {
+                    if(!this.newItem.client || !this.newItem.amount) return;
+                    this.items.push({...this.newItem});
+                    this.save();
+                    this.newItem = { client: '', amount: '', dueDate: '' };
+                },
+                calculateDays(date) {
+                    const diff = new Date() - new Date(date);
+                    return Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24)));
+                },
+                calculateTotal(amt, date) {
+                    const days = this.calculateDays(date);
+                    return (parseFloat(amt) + (amt * 0.05) + (amt * days * 0.001)).toFixed(2);
+                },
+                save() { localStorage.setItem('recovery_v1', JSON.stringify(this.items)); this.calc(); },
+                calc() { this.stats.total = this.items.reduce((sum, i) => sum + parseFloat(this.calculateTotal(i.amount, i.dueDate)), 0); }
+            }
+        }
+    </script>
+</body>
+</html>
