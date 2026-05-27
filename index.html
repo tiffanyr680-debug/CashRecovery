@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CashRecovery PRO | CEO Hybrid Model</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #040712; color: #f8fafc; }
+        .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
+        .btn-high-ticket { background: #ef4444; color: white; font-weight: 800; transition: 0.3s; }
+        .btn-high-ticket:hover { background: #f43f5e; transform: scale(1.02); }
+        .btn-subscription { background: white; color: black; font-weight: 800; transition: 0.3s; }
+        .btn-subscription:hover { background: #f8fafc; transform: scale(1.02); }
+        [x-cloak] { display: none !important; }
+    </style>
+</head>
+<body x-data="recoveryApp()" class="py-12 px-6">
+
+    <div class="max-w-6xl mx-auto">
+        
+        <!-- Header -->
+        <header class="flex justify-between items-center mb-20">
+            <div class="text-3xl font-black italic text-rose-500 cursor-pointer" @click="view = 'landing'">CashRecovery PRO</div>
+            <div class="flex gap-4">
+                 <button @click="view = 'app'" class="bg-white/5 border border-white/10 px-6 py-2 rounded-xl font-bold text-xs uppercase tracking-widest hover:text-rose-500 transition-all">Launch Free Scanner</button>
+            </div>
+        </header>
+
+        <!-- LANDING PAGE -->
+        <div x-show="view === 'landing'">
+            <div class="text-center mb-20">
+                <h1 class="text-7xl md:text-8xl font-black mb-6 tracking-tighter">Your clients owe you <span class="text-rose-500 italic underline">thousands.</span></h1>
+                <p class="text-slate-400 text-xl max-w-2xl mx-auto mb-16">Run a free 30-second scan of your overdue invoices. Reclaim your lost profit and stop working for free.</p>
+                <div class="glass p-12 rounded-[4rem] border-white/5 text-center max-w-2xl mx-auto shadow-2xl border-2 border-rose-500/20">
+                    <div class="text-6xl mb-8">💎</div>
+                    <h3 class="text-3xl font-bold mb-4 text-white">Start Your Free Recovery Audit</h3>
+                    <p class="text-slate-500 mb-10 italic">"Identify 100% of your late fees and legal interest in seconds."</p>
+                    <button @click="view = 'app'" class="w-full btn-high-ticket py-6 rounded-[2rem] text-2xl shadow-xl shadow-rose-600/30 transition-all active:scale-95">Launch Scanner Now</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- APP / RESULTS -->
+        <div x-show="view === 'app'" x-cloak>
+            <div class="text-center mb-16">
+                 <h2 class="text-4xl font-black mb-4 uppercase text-white">Select Your Recovery Path</h2>
+                 <p class="text-slate-500">Your scan has identified multiple opportunities. How do you want to proceed?</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
+                 <!-- TIER 1: DONE-FOR-YOU -->
+                 <div class="glass p-12 rounded-[4rem] border-rose-500/30 bg-rose-500/5 flex flex-col justify-between border-2">
+                    <div>
+                        <span class="bg-rose-500 text-white text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest">Premium Service</span>
+                        <h2 class="text-4xl font-black mt-8 mb-4 tracking-tight text-white">Full Expert Recovery</h2>
+                        <p class="text-slate-400 text-sm mb-12 leading-relaxed font-medium">Schedule a 60-minute implementation session. We calculate every legal late fee, audit your contracts, and send the firm legal escalations for you. 100% ROI Guaranteed.</p>
+                    </div>
+                    <a href="https://buy.stripe.com/test_aFafZgaphapleHw7lt0Fi0f" target="_blank" class="w-full btn-high-ticket py-6 rounded-[2rem] text-center text-xl shadow-2xl">BOOK $1,000 SESSION</a>
+                 </div>
+
+                 <!-- TIER 2: DO-IT-YOURSELF -->
+                 <div class="glass p-12 rounded-[4rem] border-white/10 flex flex-col justify-between">
+                    <div>
+                        <span class="bg-indigo-600 text-white text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest">Enterprise Software</span>
+                        <h2 class="text-4xl font-black mt-8 mb-4 tracking-tight text-white">Automated License</h2>
+                        <p class="text-slate-400 text-sm mb-12 leading-relaxed font-medium">Unlock the full software engine. Manage 1,000+ invoices, automate monthly escalations, and track your total recovery potential in real-time. Best for growing agencies.</p>
+                    </div>
+                    <a href="https://buy.stripe.com/test_aFafZgaphapleHw7lt0Fi0f" target="_blank" class="w-full btn-subscription py-6 rounded-[2rem] text-center text-xl shadow-2xl">GET LICENSE — $99/mo</a>
+                 </div>
+            </div>
+
+            <div class="text-center space-y-4">
+                <button @click="view = 'landing'" class="text-slate-600 text-[10px] uppercase font-black tracking-[0.4em] hover:text-white transition-all">← Back to Home</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function recoveryApp() {
+            return {
+                view: 'landing',
+                init() { console.log('CashRecovery PRO Online'); }
+            }
+        }
+    </script>
+</body>
+</html>
