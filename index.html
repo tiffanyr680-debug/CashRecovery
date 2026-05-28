@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CashRecovery PRO | CEO Hybrid Model</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #040712; color: #f8fafc; }
+        .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
+        .btn-high-ticket { background: #ef4444; color: white; font-weight: 800; transition: 0.3s; }
+        .btn-high-ticket:hover { background: #f43f5e; transform: scale(1.02); }
+        .btn-subscription { background: white; color: black; font-weight: 800; transition: 0.3s; }
+        [x-cloak] { display: none !important; }
+    </style>
+</head>
+<body x-data="recoveryApp()" x-init="init()" class="py-12 px-6">
+
+    <div class="max-w-6xl mx-auto">
+        
+        <!-- Header -->
+        <header class="flex justify-between items-center mb-20">
+            <div class="text-3xl font-black italic text-rose-500 cursor-pointer" @click="view = 'landing'">CashRecovery PRO</div>
+            <div class="flex gap-4">
+                 <button @click="view = 'app'; loadDemo()" class="bg-white/5 border border-white/10 px-6 py-2 rounded-xl font-bold text-xs uppercase tracking-widest hover:text-rose-500 transition-all">Try Live Demo</button>
+            </div>
+        </header>
+
+        <!-- LANDING PAGE -->
+        <main x-show="view === 'landing'">
+            <div class="text-center mb-20 animate-in fade-in duration-700">
+                <h1 class="text-7xl md:text-8xl font-black mb-6 tracking-tighter text-white leading-tight">Your clients owe you <span class="text-rose-500 italic underline">thousands.</span></h1>
+                <p class="text-slate-400 text-xl max-w-2xl mx-auto mb-16 leading-relaxed">Stop working for free. Run a 30-second scan of your overdue invoices and reclaim your lost profit today.</p>
+                
+                <div class="flex flex-col md:flex-row justify-center gap-4 max-w-2xl mx-auto">
+                    <button @click="view = 'app'; items = []" class="flex-1 btn-high-ticket py-6 rounded-[2rem] text-2xl shadow-xl shadow-rose-600/30 transition-all active:scale-95">Launch Scanner</button>
+                    <button @click="view = 'app'; loadDemo()" class="flex-1 bg-white/5 border border-white/10 text-white font-bold py-6 rounded-[2rem] text-2xl hover:bg-white/10 transition-all">Try Live Demo</button>
+                </div>
+            </div>
+        </main>
+
+        <!-- APP / SCANNER VIEW -->
+        <main x-show="view === 'app'" x-cloak class="animate-in slide-in-from-bottom duration-500">
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                <!-- STATS -->
+                <div class="glass p-10 rounded-[3rem] border-rose-500/20 bg-rose-500/5">
+                    <p class="text-rose-500 text-[10px] font-black uppercase mb-4 tracking-widest">Unclaimed Late Fees</p>
+                    <div class="text-6xl font-black text-white" x-text="'$' + stats.fees.toLocaleString()">$0</div>
+                </div>
+                <div class="glass p-10 rounded-[3rem] border-white/5">
+                    <p class="text-slate-500 text-[10px] font-black uppercase mb-4 tracking-widest">Total Recovery Value</p>
+                    <div class="text-6xl font-black text-white" x-text="'$' + stats.total.toLocaleString()">$0</div>
+                </div>
+                <div class="p-10 rounded-[3rem] bg-rose-600 text-white flex flex-col justify-center shadow-2xl">
+                    <h4 class="font-black italic text-xs uppercase mb-2">System Notice</h4>
+                    <p class="text-[11px] leading-relaxed font-medium">Escalation scripts are ready for all <span x-text="items.length"></span> identified late invoices.</p>
+                </div>
+            </div>
+
+            <!-- TABLE -->
+            <div class="glass rounded-[3rem] overflow-hidden mb-12 border-white/5 shadow-2xl">
+                <table class="w-full text-left">
+                    <thead class="bg-white/5 text-[10px] font-bold text-slate-500 uppercase tracking-[0.3em]">
+                        <tr><th class="p-8">Client</th><th>Days Late</th><th>Late Fee</th><th>New Total</th><th class="p-8 text-right">Escalate</th></tr>
+                    </thead>
+                    <tbody class="divide-y divide-white/5">
+                        <template x-for="item in items">
+                            <tr class="hover:bg-white/[0.02] transition-colors">
+                                <td class="p-8 font-black text-white text-lg" x-text="item.client"></td>
+                                <td class="text-rose-500 font-bold" x-text="item.days + 'd'"></td>
+                                <td class="text-emerald-500 font-bold" x-text="'$' + item.fee"></td>
+                                <td class="text-white font-black" x-text="'$' + item.total"></td>
+                                <td class="p-8 text-right">
+                                    <button @click="alert('Escalation Script Copied to Clipboard!')" class="bg-indigo-600 text-white text-[10px] font-black px-6 py-2 rounded-xl hover:scale-105 transition-all">GET SCRIPT</button>
+                                </td>
+                            </tr>
+                        </template>
+                        <template x-if="items.length === 0">
+                            <tr><td colspan="5" class="p-20 text-center text-slate-600 italic">Enter an invoice above or click "Try Live Demo"</td></tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- PRICING TIERS -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                <div class="glass p-8 rounded-3xl border-rose-500/20 text-left">
+                    <h4 class="font-bold text-white mb-2">Done-For-You Recovery</h4>
+                    <p class="text-slate-500 text-xs mb-6">I will manually recover these funds for you. 100% ROI.</p>
+                    <a href="https://buy.stripe.com/test_aFafZgaphapleHw7lt0Fi0f" target="_blank" class="block text-center bg-rose-600 py-4 rounded-xl font-black text-white shadow-lg">BOOK SESSION — $1,000</a>
+                </div>
+                <div class="glass p-8 rounded-3xl border-white/10 text-left">
+                    <h4 class="font-bold text-white mb-2">Software License</h4>
+                    <p class="text-slate-500 text-xs mb-6">Unlock the tool to manage all your clients monthly.</p>
+                    <a href="https://buy.stripe.com/test_aFafZgaphapleHw7lt0Fi0f" target="_blank" class="block text-center bg-white text-black py-4 rounded-xl font-black shadow-lg">GET SOFTWARE — $99/mo</a>
+                </div>
+            </div>
+
+        </main>
+
+    </div>
+
+    <script>
+        function recoveryApp() {
+            return {
+                view: 'landing',
+                items: [],
+                stats: { fees: 0, total: 0 },
+                init() {},
+                loadDemo() {
+                    this.items = [
+                        { client: 'Acme Digital', days: 45, fee: '750.00', total: '15,750.00' },
+                        { client: 'Stellar Agency', days: 12, fee: '125.00', total: '2,625.00' },
+                        { client: 'Nexus Global', days: 84, fee: '1,340.00', total: '11,340.00' }
+                    ];
+                    this.stats.fees = 2215;
+                    this.stats.total = 29715;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
